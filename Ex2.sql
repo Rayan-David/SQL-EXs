@@ -1,0 +1,57 @@
+CREATE DATABASE hospedagem;
+USE hospedagem;
+
+CREATE TABLE cliente(
+id INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(100) NOT NULL,
+email VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE plano_hospedagem(
+id INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(50) NOT NULL,
+espaco_gb INT NOT NULL UNIQUE,
+preco DECIMAL(7,2) NOT NULL
+);
+
+CREATE TABLE servidor(
+id INT AUTO_INCREMENT PRIMARY KEY,
+hostname VARCHAR(60) NOT NULL UNIQUE,
+ip VARCHAR(15) NOT NULL UNIQUE,
+localizacao VARCHAR(60)
+);
+
+CREATE TABLE site(
+id INT AUTO_INCREMENT PRIMARY KEY,
+dominio VARCHAR(100) NOT NULL UNIQUE,
+data_contratacao DATE NOT NULL,
+cliente_id INT NOT NULL,
+servidor_id INT NOT NULL,
+FOREIGN KEY(cliente_id)
+REFERENCES cliente(id),
+FOREIGN KEY(servidor_id)
+REFERENCES servidor(id)
+);
+
+CREATE TABLE certificado_ssl(
+id INT AUTO_INCREMENT PRIMARY KEY,
+data_validade DATE NOT NULL,
+site_id INT NOT NULL UNIQUE,
+FOREIGN KEY(site_id)
+REFERENCES site(id)
+);
+
+ALTER TABLE plano_hospedagem MODIFY espaco_gb INT NOT NULL;
+
+SHOW TABLES;
+DESCRIBE cliente;
+DESCRIBE plano_hospedagem;
+DESCRIBE servidor;
+DESCRIBE site;
+DESCRIBE certificado_ssl;
+
+ALTER TABLE servidor ADD sistema_operacional VARCHAR(30);
+ALTER TABLE servidor MODIFY ip VARCHAR(45) NOT NULL UNIQUE;
+ALTER TABLE servidor DROP localizacao;
+
+DESCRIBE servidor;
